@@ -22,28 +22,22 @@ cloudinary.config({
 const upload = multer({ dest: 'uploads/' });
 
 const pool = mysql.createPool({
-    host: 'mysql.railway.internal',  // Reemplaza con el valor directo
-    user: 'root',                    // Reemplaza con el valor directo
-    password: 'dYtzmVnDhqDfzhJsxziFXdvgOpjqxDrW', // Reemplaza con el valor directo
-    database: 'railway',             // Reemplaza con el valor directo
-    port: '3306',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+    port: process.env.MYSQL_PORT
 });
-
 
 
 
 // Verificar conexión a MySQL
 pool.getConnection()
-    .then((conn) => {
+    .then(conn => {
         console.log('✅ Conexión a MySQL exitosa');
         conn.release();
     })
-    .catch((err) => {
-        console.error('❌ Error al conectar a MySQL:', err);
-    });
+    .catch(err => console.error('❌ Error al conectar a MySQL:', err));
 
 
 // Crear Superadmin si no existe
