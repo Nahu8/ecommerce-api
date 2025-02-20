@@ -21,26 +21,29 @@ cloudinary.config({
 // Configurar Multer para manejar la subida de archivos
 const upload = multer({ dest: 'uploads/' });
 
-// Configurar conexión a MySQL
 const pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
-    port: process.env.MYSQL_PORT || 3306,  // Usa el puerto de Railway
+    port: process.env.MYSQL_PORT,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
 });
 
 
+
 // Verificar conexión a MySQL
 pool.getConnection()
-    .then(conn => {
+    .then((conn) => {
         console.log('✅ Conexión a MySQL exitosa');
         conn.release();
     })
-    .catch(err => console.error('❌ Error al conectar a MySQL:', err));
+    .catch((err) => {
+        console.error('❌ Error al conectar a MySQL:', err);
+    });
+
 
 // Crear Superadmin si no existe
 const crearSuperadmin = async () => {
@@ -196,6 +199,10 @@ app.post('/enviar-correo', (req, res) => {
             <p><strong>Número de celular:</strong> ${celular}</p>
             <p>Para finalizar la compra, transfiere <strong>${cantidad * producto.precio}</strong> a este alias: <strong>${alias}</strong>.</p>
             <p>¡Gracias por elegirnos!</p>
+
+            <h3>El envío comenzará 72 horas después de abonar la compra.</h3>
+
+            <h2>Castle Clothing...<h2>
         `,
     };
 
